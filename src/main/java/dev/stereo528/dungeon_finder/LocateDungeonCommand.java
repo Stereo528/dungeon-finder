@@ -34,7 +34,7 @@ public class LocateDungeonCommand {
 
     public LocateDungeonCommand() {}
 
-    public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher, CommandBuildContext commandBuildContext) {
+    public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher) {
         commandDispatcher.register(Commands.literal("locate_spawner")
                 .requires((commandSourceStack) -> commandSourceStack.hasPermission(2))
                 .executes((context -> locateSpawner(context.getSource(), ResourceOrTagArgument.getResourceOrTag(context, "spawner", Registries.BLOCK))))
