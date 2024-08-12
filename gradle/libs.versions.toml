@@ -1,10 +1,10 @@
 [versions]
 # Latest Versions can be found at https://fabricmc.net/develop/
-minecraft = "1.21"
+minecraft = "1.21.1"
 fabric_loader = "0.15.11"
-fapi = "0.100.4+1.21"
+fapi = "0.102.1+1.21.1"
 
-sodium = "mc1.21-0.5.9"
+sodium = "mc1.21-0.5.11"
 joml = "1.10.6"  # Needed for Sodium
 modmenu = "11.0.1"
 

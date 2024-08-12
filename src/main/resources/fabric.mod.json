@@ -1,31 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "example",
+  "id": "dungeon_finder",
   "version": "${version}",
-  "name": "Example",
-  "description": "lorem ipsum",
+  "name": "Dungeon Finder",
+  "description": "finds the location of the nearest spawner(s) within a configurable distance",
   "authors": [
     "Stereo528"
   ],
   "contact": {
     "homepage": "https://stereo528.dev",
-    "sources": "https://github.com/Stereo528/fabric-template-mod",
-    "issues": "https://github.com/Stereo528/fabric-template-mod/issues"
+    "sources": "https://github.com/Stereo528/dungeon-finder",
+    "issues": "https://github.com/Stereo528/dungeon-finder/issues"
   },
   "license": "BSD-3-Clause",
   "icon": "assets/example/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "dev.stereo528.example.client.ExampleClient"
-    ],
     "main": [
-      "dev.stereo528.example.Example"
+      "dev.stereo528.dungeon_finder.DungeonFinder"
     ]
   },
-  "mixins": [
-    "example.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
