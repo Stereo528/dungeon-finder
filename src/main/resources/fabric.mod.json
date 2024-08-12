@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "example",
+  "version": "${version}",
+  "name": "Example",
+  "description": "lorem ipsum",
+  "authors": [
+    "Stereo528"
+  ],
+  "contact": {
+    "homepage": "https://stereo528.dev",
+    "sources": "https://github.com/Stereo528/fabric-template-mod",
+    "issues": "https://github.com/Stereo528/fabric-template-mod/issues"
+  },
+  "license": "BSD-3-Clause",
+  "icon": "assets/example/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "dev.stereo528.example.client.ExampleClient"
+    ],
+    "main": [
+      "dev.stereo528.example.Example"
+    ]
+  },
+  "mixins": [
+    "example.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

@@ -1,0 +1,130 @@
+plugins {
+    alias libs.plugins.loom
+    alias libs.plugins.grgit
+    id 'maven-publish'
+}
+
+archivesBaseName = "${project.archives_base_name}-mc${libs.versions.minecraft.get()}"
+version = getVersion()
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    maven {
+        url "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    maven { url "https://maven.terraformersmc.com/" }
+}
+
+// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
+// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
+dependencies {
+    minecraft libs.minecraft
+    mappings loom.officialMojangMappings()
+    modImplementation libs.fabric.loader
+
+    modImplementation libs.fapi
+    modLocalRuntime libs.bundles.dev
+}
+
+processResources {
+    inputs.property "version", version
+    inputs.property "minecraft_version", libs.versions.minecraft.get()
+    inputs.property "loader_version", libs.versions.fabric.loader.get()
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": version,
+                "minecraft_version": libs.versions.minecraft.get(),
+                "loader_version": libs.versions.fabric.loader.get()
+    }
+}
+
+def targetJavaVersion = 21
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 21
+}
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}
+
+tasks.register('buildOrPublish') {
+    group = "build"
+    String mavenUser = System.getenv().MAVEN_USER
+    if (mavenUser != null && !mavenUser.isEmpty()) {
+        dependsOn(tasks.named("publish"))
+        println("Prepared To Publish to Maven")
+    } else {
+        dependsOn(tasks.named("build"))
+        println("Prepared to Build")
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.maven_group
+            artifactId "${project.archives_base_name}"
+            version getVersion()
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = "https://mvn.devos.one/${System.getenv().PUBLISH_SUFFIX}/"
+            credentials {
+                username = System.getenv().MAVEN_USER
+                password = System.getenv().MAVEN_PASS
+            }
+            authentication { basic(BasicAuthentication) }
+        }
+    }
+}
+
+String getVersion() {
+    def mod_version = project.mod_version
+    def build_id = System.getenv("GITHUB_RUN_NUMBER")
+
+    // CI builds only
+    if (build_id != null) {
+        return "${mod_version}+build.${build_id}"
+    }
+    if (grgit != null) {
+        def head = null
+        def id = null
+        if (grgit.head() != null) {
+            head = grgit.head()
+            id = head.abbreviatedId
+        }
+
+        // Flag the build if the build tree is not clean
+        if (!grgit.status().clean) {
+            id += "-dirty"
+        }
+
+        return "${mod_version}+rev.${id}"
+    }
+
+    // No tracking information could be found about the build
+    return "${mod_version}+unknown"
+
+}
