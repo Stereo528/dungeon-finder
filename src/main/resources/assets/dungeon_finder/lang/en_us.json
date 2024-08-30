@@ -1,3 +1,4 @@
 {
-  "dungeon_finder.found_dungeon.success": "Found Nearest Spawner At"
+  "dungeon_finder.found_dungeon.success": "Found Nearest Spawner At %s %s %s",
+  "dungeon_finder.no_spawner_found": "No Nearby Spawner(s)"
 }
