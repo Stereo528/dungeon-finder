@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocateDungeonCommand {
-    private static final DynamicCommandExceptionType ERROR_NO_SPAWNER_FOUND = new DynamicCommandExceptionType((object) -> Component.translatable("dungeon_finder.no_spawner_found"));
+    private static final DynamicCommandExceptionType ERROR_NO_SPAWNER_FOUND = new DynamicCommandExceptionType((object) -> Component.literal("No Nearby Spawner(s)"));
 
     public LocateDungeonCommand() {}
 
@@ -71,7 +71,7 @@ public class LocateDungeonCommand {
         }
         BlockPos finalClosest = closest;
         int distance = Mth.floor(Mth.sqrt((float) blockPos.distSqr(finalClosest)));
-        String distanceStr = "(" + distance + " Blocks Away)";
+        String distanceStr = " (" + distance + " Blocks Away) ";
         StringBuilder blockPosListString = new StringBuilder();
         if(printList) {
             for (BlockPos blockPos1 : blockPosList) {
@@ -83,8 +83,7 @@ public class LocateDungeonCommand {
                 .withStyle(style ->
                         style.withColor(ChatFormatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + finalClosest.getX() + " " + finalClosest.getY() + " " + finalClosest.getZ())).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.coordinates.tooltip")))
                 );
-        String string = "dungeon_finder.found_dungeon.success";
-        commandSourceStack.sendSuccess(() -> Component.translatable(string, component, distanceStr, blockPosListString.toString()), false);
+        commandSourceStack.sendSuccess(() -> Component.literal("Found Nearest Spawner At ").append(component).append(distanceStr).append(blockPosListString.toString()), false);
         return Command.SINGLE_SUCCESS;
     }
 

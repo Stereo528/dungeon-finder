@@ -13,7 +13,7 @@
     "issues": "https://github.com/Stereo528/dungeon-finder/issues"
   },
   "license": "BSD-3-Clause",
-  "icon": "assets/example/icon.png",
+  "icon": "assets/dungeon_finder/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
